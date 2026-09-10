@@ -323,7 +323,7 @@
                             }
                         }
                     }'>
-                    @foreach ($sliders as $slider)
+                    @foreach ($sliders ?? [] as $slider)
                         <div class="intro-slide"
                             style="background-image: url({{ url($slider->name == '' ? 'backend/assets/img/slider.png' : '/slider/' . $slider->name) }});">
                             <div class="container intro-content">
@@ -347,7 +347,7 @@
                 <div class="section-header-modern">
                     <div class="sh-left">
                         <h2 class="sh-title">New Arrival</h2>
-                        <span class="sh-count">{{ count($NEW_ARRIVALS) }} results</span>
+                        <span class="sh-count">{{ count($NEW_ARRIVALS ?? []) }} results</span>
                     </div>
                     <div class="sh-right">
                         <!-- Add your link to the full New Arrival page here if you have one -->
@@ -356,7 +356,7 @@
                 </div>
                 
                 <div class="row justify-content-start">
-                    @foreach ($NEW_ARRIVALS->take(8) as $item) <!-- .take(8) keeps home page clean -->
+                    @foreach (collect($NEW_ARRIVALS ?? [])->take(8) as $item) <!-- Protected collection wrapper -->
                         <div class="col-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
                             <div class="card cls_card_item w-100">
                                 
@@ -422,7 +422,7 @@
                 <div class="section-header-modern">
                     <div class="sh-left">
                         <h2 class="sh-title">Hot Sale</h2>
-                        <span class="sh-count">{{ count($HOT_SALES) }} results</span>
+                        <span class="sh-count">{{ count($HOT_SALES ?? []) }} results</span>
                     </div>
                     <div class="sh-right">
                         <!-- Add your link to the full Hot Sale page here if you have one -->
@@ -431,7 +431,7 @@
                 </div>
                 
                 <div class="row justify-content-start">
-                    @foreach ($HOT_SALES->take(8) as $item)
+                    @foreach (collect($HOT_SALES ?? [])->take(8) as $item)
                         <div class="col-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
                             <div class="card cls_card_item w-100">
                                 

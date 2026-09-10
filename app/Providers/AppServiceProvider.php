@@ -20,24 +20,24 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        // ១. កំណត់តម្លៃដើម (Default) ជាមុន ដើម្បីការពារ Error "Undefined variable" ក្នុង Blade
+        // ១. កំណត់តម្លៃដើមជា Object ដើម្បីការពារកុំឱ្យ Blade គាំងពេលហៅ ->value
         $viewData = [
             'mainColor' => null,
             'SITE_MENUS' => collect(),
             'PRODUCT_TYPES' => collect(),
             'NEW_ARRIVALS' => collect(),
             'HOT_SALES' => collect(),
-            'HEADER_LOGOS' => null,
-            'SITE_PHONENUMBER' => null,
-            'SITE_MAIL' => null,
-            'SITE_NAMES' => null,
-            'SITE_ICONS' => null,
-            'SITE_LINK_CHAT' => null,
-            'SITE_LINK_TELEGRAM' => null,
-            'GET_LOCATION' => null,
-            'GET_EMAIL' => null,
-            'GET_NUMBER_FOOTER' => null,
-            'SITE_TEXTFOOTER' => null,
+            'HEADER_LOGOS' => (object)['value' => ''],
+            'SITE_PHONENUMBER' => (object)['value' => ''],
+            'SITE_MAIL' => (object)['value' => ''],
+            'SITE_NAMES' => (object)['value' => 'UNC Computer'],
+            'SITE_ICONS' => (object)['value' => ''],
+            'SITE_LINK_CHAT' => (object)['value' => ''],
+            'SITE_LINK_TELEGRAM' => (object)['value' => ''],
+            'GET_LOCATION' => (object)['value' => ''],
+            'GET_EMAIL' => (object)['value' => ''],
+            'GET_NUMBER_FOOTER' => (object)['value' => ''],
+            'SITE_TEXTFOOTER' => (object)['value' => ''],
             'GET_FOLLOW_US' => collect(),
             'GET_IMAGE_PAYMENT' => collect(),
             'GET_EASYLINKS' => collect(),
@@ -77,8 +77,9 @@ class AppServiceProvider extends ServiceProvider
                         ->get();
                 });
 
-                $viewData['SITE_ICONS'] = Settings::where('key', 'site.icon')->first();
-                $viewData['SITE_NAMES'] = Settings::where('key', 'site.sitename')->first();
+                // ការពារការគាំងពេល DB អត់ទាន់មានទិន្នន័យ (ផ្តល់ Object ទទេ)
+                $viewData['SITE_ICONS'] = Settings::where('key', 'site.icon')->first() ?? (object)['value' => ''];
+                $viewData['SITE_NAMES'] = Settings::where('key', 'site.sitename')->first() ?? (object)['value' => 'UNC Computer'];
 
                 $viewData['GET_EASYLINKS'] = $cacheRemember('key_easylinks', $cacheDuration, function() {
                     return EasyLink::select('site_menu.name as site_name', 'easy_links.menu_id', 'easy_links.route')
@@ -94,25 +95,29 @@ class AppServiceProvider extends ServiceProvider
                     return Settings::select('key', 'value', 'link')->get();
                 });
 
-                $viewData['mainColor'] = $settings->firstWhere('key', 'site.color')->value ?? null;
-                $viewData['HEADER_LOGOS'] = $settings->firstWhere('key', 'site.logo.front') ?? null;
-                $viewData['SITE_PHONENUMBER'] = $settings->firstWhere('key', 'site.phonenumber') ?? null;
-                $viewData['SITE_MAIL'] = $settings->firstWhere('key', 'site.mail') ?? null;
-                $viewData['SITE_LINK_CHAT'] = $settings->firstWhere('key', 'site.chat') ?? null;
-                $viewData['SITE_LINK_TELEGRAM'] = $settings->firstWhere('key', 'site.telegram') ?? null;
-                $viewData['GET_LOCATION'] = $settings->firstWhere('key', 'site.location') ?? null;
-                $viewData['GET_EMAIL'] = $settings->firstWhere('key', 'site.email') ?? null;
-                $viewData['GET_NUMBER_FOOTER'] = $settings->firstWhere('key', 'site.numberphone') ?? null;
-                $viewData['SITE_TEXTFOOTER'] = $settings->firstWhere('key', 'site.textfooter') ?? null;
+                // ប្រើ optional() ដើម្បីការពារ error កន្លែងនេះ
+                $viewData['mainColor'] = optional($settings->firstWhere('key', 'site.color'))->value;
+                
+                // ការពារការគាំង "Attempt to read property 'value' on null" ក្នុង Blade View
+                $viewData['HEADER_LOGOS'] = $settings->firstWhere('key', 'site.logo.front') ?? (object)['value' => ''];
+                $viewData['SITE_PHONENUMBER'] = $settings->firstWhere('key', 'site.phonenumber') ?? (object)['value' => ''];
+                $viewData['SITE_MAIL'] = $settings->firstWhere('key', 'site.mail') ?? (object)['value' => ''];
+                $viewData['SITE_LINK_CHAT'] = $settings->firstWhere('key', 'site.chat') ?? (object)['value' => ''];
+                $viewData['SITE_LINK_TELEGRAM'] = $settings->firstWhere('key', 'site.telegram') ?? (object)['value' => ''];
+                $viewData['GET_LOCATION'] = $settings->firstWhere('key', 'site.location') ?? (object)['value' => ''];
+                $viewData['GET_EMAIL'] = $settings->firstWhere('key', 'site.email') ?? (object)['value' => ''];
+                $viewData['GET_NUMBER_FOOTER'] = $settings->firstWhere('key', 'site.numberphone') ?? (object)['value' => ''];
+                $viewData['SITE_TEXTFOOTER'] = $settings->firstWhere('key', 'site.textfooter') ?? (object)['value' => ''];
+                
                 $viewData['GET_FOLLOW_US'] = $settings->where('key', 'site.follow_us') ?? collect();
                 $viewData['GET_IMAGE_PAYMENT'] = $settings->where('key', 'site.payment_image') ?? collect();
 
             } catch (\Exception $e) {
-                // បើអត់ទាន់មាន Database វានឹងរំលង ប៉ុន្តែនៅតែមានអថេរ Default ខាងលើដើម្បីការពារកុំឱ្យគាំង
+                // រំលង Error
             }
         }
 
-        // ២. ចែករំលែកអថេរទាំងអស់ទៅកាន់ Views (នៅក្រៅ Catch គឺធានាថាដើរជានិច្ច)
+        // ២. ចែករំលែកអថេរទាំងអស់ទៅកាន់ Views
         View::share($viewData);
     }
 }

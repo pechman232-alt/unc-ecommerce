@@ -1,0 +1,255 @@
+/* Slider */
+.slick-slider
+{
+    position: relative;
+
+    display: block;
+    box-sizing: border-box;
+
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
+    -ms-touch-action: pan-y;
+        touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.slick-list
+{
+    position: relative;
+
+    display: block;
+    overflow: hidden;
+
+    margin: 0;
+    padding: 0;
+}
+.slick-list:focus
+{
+    outline: none;
+}
+.slick-list.dragging
+{
+    cursor: pointer;
+    cursor: hand;
+}
+
+.slick-slider .slick-track,
+.slick-slider .slick-list
+{
+    -webkit-transform: translate3d(0, 0, 0);
+       -moz-transform: translate3d(0, 0, 0);
+        -ms-transform: translate3d(0, 0, 0);
+         -o-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+}
+
+.slick-track
+{
+    position: relative;
+    top: 0;
+    left: 0;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.slick-track:before,
+.slick-track:after
+{
+    display: table;
+
+    content: '';
+}
+.slick-track:after
+{
+    clear: both;
+}
+.slick-loading .slick-track
+{
+    visibility: hidden;
+}
+
+.slick-slide
+{
+    display: none;
+    float: left;
+
+    height: 100%;
+    min-height: 1px;
+}
+[dir='rtl'] .slick-slide
+{
+    float: right;
+}
+.slick-slide img
+{
+    display: block;
+}
+.slick-slide.slick-loading img
+{
+    display: none;
+}
+.slick-slide.dragging img
+{
+    pointer-events: none;
+}
+.slick-initialized .slick-slide
+{
+    display: block;
+}
+.slick-loading .slick-slide
+{
+    visibility: hidden;
+}
+.slick-vertical .slick-slide
+{
+    display: block;
+
+    height: auto;
+
+    border: 1px solid transparent;
+}
+.slick-arrow.slick-hidden {
+    display: none;
+}
+
+
+/* style */
+
+/*@import url("https://fonts.googleapis.com/css?family=Lato:400,400i,700");*/
+
+
+.card-text{
+   overflow: hidden;
+   display: -webkit-box;
+   -webkit-line-clamp: 3; /* number of lines to show */
+           line-clamp: 3; 
+   -webkit-box-orient: vertical;
+}
+.slick-slide {
+  margin: 0 7px;
+}
+
+.slide-item {
+  display: flex !important;
+  justify-content: center;
+  background: #f7f7f7;
+  border: 1px solid #ececec;
+  padding: 14px;
+   margin-right: 12px;
+}
+.slide-item h3 {
+  font-family: Lato, sans-serif;
+  font-size: 40px;
+}
+.slide-item{
+  margin: 13px 0px;
+}
+
+/* Hide the text content */
+.slick-prev, .slick-next {
+  font-size: 0;
+  line-height: 0;
+  position: absolute;
+  top: -30px;
+  transform: translateY(-50%);
+  width: 50px; /* Adjust width as needed */
+  height: 40px; /* Adjust height as needed */
+  background: transparent; /* Remove background */
+  border: none; /* Remove border */
+  outline: none; /* Remove outline */
+  opacity: 0.3;
+}
+
+.slick-prev {
+  right: 60px;
+  background-image: url('arrow-back.png');
+}
+
+.slick-next {
+  right: 0px;
+  background-image: url('arrow-forward.png');
+}
+
+.cls_card_item{
+  background-color: #ff000000 !important;
+}
+
+.cls_card_item:last-child {
+  border-bottom: none !important;
+}
+
+.cls_card_item .card-body{
+  padding: 0px !important;
+  margin-top: 18px;
+}
+.cls_card_item .card-body p{
+  line-height: 1.5;
+  /* margin-top: 12px; */
+ 
+}
+.slide-item .card-body .cls_price{
+  color:#CE181E;
+}
+.slide-item .card-body .cls_price s{
+  margin-left: 5px;
+}
+.cls_card_item .card-title{
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+@media only screen and (min-width: 1025px)  {
+  .slick-slide {
+    margin: 0 20px;
+  }
+  
+  /* the parent */
+  .slick-list {
+    margin: 0 -20px;
+  }
+}
+
+@media only screen and (max-width: 1024px) and (min-width: 769px)  {
+  .slick-slide {
+    margin: 0 8px;
+  }
+  
+  /* the parent */
+  .slick-list {
+    margin: 0 -8px;
+  }
+}
+
+@media only screen and (max-width: 768px) and (min-width: 425px)  {
+  .slick-slide {
+    margin: 0 10px;
+  }
+  
+  /* the parent */
+  .slick-list {
+    margin: 0 -10px;
+  }
+}
+
+@media only screen and (max-width: 425px) {
+  .slick-slide {
+    margin: 0 7px;
+  }
+  
+  /* the parent */
+  .slick-list {
+    margin: 0 -7px;
+  }
+}
+
+
+
+

@@ -16,68 +16,22 @@
             background-color: var(--bg-light);
         }
 
+        /* --- Section Titles --- */
+        .section-title {
+            text-align: left;
+            font-weight: 800;
+            font-size: 1.75rem;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            position: relative;
+            font-family: "Kantumruy Pro", sans-serif;
+        }
+
         /* --- Slider Container --- */
         .intro-slider-container {
             border-radius: var(--card-radius);
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-        }
-
-        /* =========================================
-           NEW: MODERN SECTION HEADERS (From Screenshot)
-           ========================================= */
-        .section-header-modern {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 2rem;
-            padding-bottom: 0.5rem;
-        }
-
-        .sh-left {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .sh-title {
-            font-size: 1.85rem;
-            font-weight: 800;
-            color: var(--text-dark);
-            margin: 0;
-            line-height: 1.2;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        .sh-count {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .sh-right {
-            margin-bottom: 4px;
-        }
-
-        .sh-link {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            text-decoration: none !important;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: var(--transition);
-            background: #fff;
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: 1px solid #d1d5db;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-        }
-
-        .sh-link:hover {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
         }
 
         /* =========================================
@@ -96,11 +50,13 @@
             padding: 0; 
         }
 
+        /* Hover Effect for the whole card */
         .cls_card_item:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
         }
 
+        /* Top Image Area */
         .product-media-wrap {
             position: relative;
             background-color: var(--image-bg);
@@ -131,6 +87,7 @@
             transform: scale(1.05); 
         }
 
+        /* Floating Badges */
         .product-badges {
             position: absolute;
             top: 15px;
@@ -152,6 +109,7 @@
             text-transform: uppercase;
         }
 
+        /* Wishlist Heart Button */
         .wishlist-btn {
             position: absolute;
             top: 15px;
@@ -175,6 +133,7 @@
             transform: scale(1.1);
         }
 
+        /* Quick View Overlay Animation */
         .quick-view-overlay {
             position: absolute;
             bottom: 0;
@@ -211,6 +170,7 @@
             transform: translateY(0);
         }
 
+        /* --- Card Body & Modern Typography --- */
         .card-body {
             padding: 1.25rem;
             display: flex;
@@ -254,10 +214,11 @@
             overflow: hidden;
         }
 
+        /* --- Price & Cart Footer Row --- */
         .card-footer-custom {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: center; /* Centers cart button with price perfectly */
             margin-top: auto;
             border-top: 1px solid #f3f4f6; 
             padding-top: 1rem;
@@ -267,15 +228,16 @@
             display: flex;
             flex-direction: column;
             margin-bottom: 0;
+            /* Changed to standard modern sans-serif for numbers to look clean and premium */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         .cls_price b {
             color: var(--primary-color);
-            font-size: 1.25rem; 
-            font-weight: 700; 
+            font-size: 1.25rem; /* Made price slightly larger */
+            font-weight: 700; /* Clean bold, not overly chunky */
             line-height: 1.1;
-            letter-spacing: -0.5px; 
+            letter-spacing: -0.5px; /* Pulls numbers slightly closer together for a pro look */
         }
 
         .cls_price s {
@@ -286,6 +248,7 @@
             text-decoration: line-through;
         }
 
+        /* Cart Button */
         .cart-btn {
             background-color: #111827; 
             color: #fff;
@@ -323,7 +286,7 @@
                             }
                         }
                     }'>
-                    @foreach ($sliders ?? [] as $slider)
+                    @foreach ($sliders as $slider)
                         <div class="intro-slide"
                             style="background-image: url({{ url($slider->name == '' ? 'backend/assets/img/slider.png' : '/slider/' . $slider->name) }});">
                             <div class="container intro-content">
@@ -342,24 +305,14 @@
         <!-- NEW ARRIVAL SECTION -->
         <div class="blog-posts pt-4 pb-5">
             <div class="container">
-                
-                <!-- Modern Section Header -->
-                <div class="section-header-modern">
-                    <div class="sh-left">
-                        <h2 class="sh-title">New Arrival</h2>
-                        <span class="sh-count">{{ count($NEW_ARRIVALS ?? []) }} results</span>
-                    </div>
-                    <div class="sh-right">
-                        <!-- Add your link to the full New Arrival page here if you have one -->
-                        <a href="#" class="sh-link">View All <i class="icon-angle-right"></i></a>
-                    </div>
-                </div>
+                <h2 class="section-title">New Arrival</h2>
                 
                 <div class="row justify-content-start">
-                    @foreach (collect($NEW_ARRIVALS ?? [])->take(8) as $item) <!-- Protected collection wrapper -->
+                    @foreach ($NEW_ARRIVALS as $item)
                         <div class="col-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
                             <div class="card cls_card_item w-100">
                                 
+                                <!-- Image & Badges Area -->
                                 <div class="product-media-wrap">
                                     <div class="product-badges">
                                         <span class="custom-badge">NEW</span>
@@ -375,11 +328,13 @@
                                         </div>
                                     </a>
 
+                                    <!-- Quick View Fade Overlay -->
                                     <div class="quick-view-overlay">
                                         <a href="{{ url('product-detail/'.encrypt($item->id)) }}" class="quick-view-text">Quick view</a>
                                     </div>
                                 </div>
 
+                                <!-- Text & Price Area -->
                                 <div class="card-body">
                                     <a href="{{ url('product-detail/'.encrypt($item->id)) }}" style="text-decoration: none;">
                                         <h5 class="card-title">{{ $item->product_name }}</h5>
@@ -389,6 +344,7 @@
                                         {{ strip_tags($item->details) }}
                                     </div>
                                     
+                                    <!-- Price & Cart Row -->
                                     <div class="card-footer-custom">
                                         <p class="cls_price">
                                             <?php 
@@ -401,6 +357,7 @@
                                             @endif
                                         </p>
                                         
+                                        <!-- Add to Cart Button -->
                                         <button class="cart-btn" title="Add to Cart">
                                             <i class="icon-shopping-cart"></i>
                                         </button>
@@ -417,24 +374,14 @@
         <!-- HOT SALE SECTION -->
         <div class="blog-posts pt-3 pb-5">
             <div class="container">
-                
-                <!-- Modern Section Header -->
-                <div class="section-header-modern">
-                    <div class="sh-left">
-                        <h2 class="sh-title">Hot Sale</h2>
-                        <span class="sh-count">{{ count($HOT_SALES ?? []) }} results</span>
-                    </div>
-                    <div class="sh-right">
-                        <!-- Add your link to the full Hot Sale page here if you have one -->
-                        <a href="#" class="sh-link">View All <i class="icon-angle-right"></i></a>
-                    </div>
-                </div>
+                <h2 class="section-title">Hot Sale</h2>
                 
                 <div class="row justify-content-start">
-                    @foreach (collect($HOT_SALES ?? [])->take(8) as $item)
+                    @foreach ($HOT_SALES as $item)
                         <div class="col-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
                             <div class="card cls_card_item w-100">
                                 
+                                <!-- Image & Badges Area -->
                                 <div class="product-media-wrap">
                                     <div class="product-badges">
                                         <span class="custom-badge" style="background-color: var(--primary-color);">SALE</span>
@@ -450,11 +397,13 @@
                                         </div>
                                     </a>
 
+                                    <!-- Quick View Fade Overlay -->
                                     <div class="quick-view-overlay">
                                         <a href="{{ url('product-detail/'.encrypt($item->id)) }}" class="quick-view-text">Quick view</a>
                                     </div>
                                 </div>
 
+                                <!-- Text & Price Area -->
                                 <div class="card-body">
                                     <a href="{{ url('product-detail/'.encrypt($item->id)) }}" style="text-decoration: none;">
                                         <h5 class="card-title">{{ $item->product_name }}</h5>
@@ -464,6 +413,7 @@
                                         {{ strip_tags($item->details) }}
                                     </div>
                                     
+                                    <!-- Price & Cart Row -->
                                     <div class="card-footer-custom">
                                         <p class="cls_price">
                                             <?php 

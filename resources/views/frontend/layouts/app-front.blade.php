@@ -5,9 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $SITE_NAMES->value }}</title>
+    <!-- ការពារ SITE_NAMES -->
+    <title>{{ optional($SITE_NAMES)->value ?? 'UNC Computer' }}</title>
     <meta name="description" content="UNC Technology">
-    <link rel="icon" type="image/x-icon" href="{{ asset('/logos/' . $SITE_ICONS->value) }}" />
+    <!-- ការពារ SITE_ICONS -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('/logos/' . optional($SITE_ICONS)->value) }}" />
     
     {{-- Font --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,21 +38,22 @@
     <script src="{{ url('jquery/jquery.min.js') }}"></script>
 
     <style>
+        /* ការពារ $mainColor ក្រែងលោវា null ដើម្បីកុំឱ្យខូច CSS */
         .header-4 .header-bottom {
-            background-color: {{ $mainColor }};
+            background-color: {{ $mainColor ?? '#CE181E' }};
         }
 
         .footer {
-            background-color: {{ $mainColor }};
+            background-color: {{ $mainColor ?? '#CE181E' }};
         }
 
         .header-4.header-intro-clearance .header-search .header-search-wrapper {
-            border-color: {{ $mainColor }};
+            border-color: {{ $mainColor ?? '#CE181E' }};
             border-radius: 10px;
         }
 
         .header-4 .header-search-extended .btn {
-            background-color: {{ $mainColor }};
+            background-color: {{ $mainColor ?? '#CE181E' }};
             color: #fff;
             border-bottom-right-radius: 10px;
             border-top-right-radius: 10px;
@@ -62,8 +65,8 @@
         }
 
         .owl-theme.owl-light .owl-nav [class*='owl-']{
-            border-color: {{ $mainColor }};
-            background-color: {{ $mainColor }};
+            border-color: {{ $mainColor ?? '#CE181E' }};
+            background-color: {{ $mainColor ?? '#CE181E' }};
             color: white;
         }
 
@@ -91,7 +94,7 @@
 
         .quickView-content .owl-theme.owl-light .owl-nav [class*='owl-']:hover,
         .quickView-content .owl-theme.owl-light .owl-nav [class*='owl-']:focus {
-            color: {{ $mainColor }};
+            color: {{ $mainColor ?? '#CE181E' }};
             background-color: transparent
         }
 
@@ -124,7 +127,7 @@
         }
 
         .cls_btn_search {
-            background-color: {{ $mainColor }};
+            background-color: {{ $mainColor ?? '#CE181E' }};
             color: #fff;
             border-bottom-right-radius: 10px;
             border-top-right-radius: 10px;
@@ -137,17 +140,17 @@
         }
 
         .mobile-menu-light .mobile-search .form-control:focus {
-            border-color: {{ $mainColor }};
+            border-color: {{ $mainColor ?? '#CE181E' }};
         }
 
         .mobile-cats-lead {
             text-transform: uppercase;
-            color: {{ $mainColor }} !important;
+            color: {{ $mainColor ?? '#CE181E' }} !important;
         }
 
         .owl-theme.owl-light .owl-dots .owl-dot.active span {
             border-color: #fff;
-            background: {{ $mainColor }};
+            background: {{ $mainColor ?? '#CE181E' }};
         }
 
         @media only screen and (max-width: 425px) and (min-width: 376px) {
@@ -633,7 +636,8 @@
 
         <div class="fab-wheel">
             <div class="fab-action fab-action-1">
-                <a href="{{ $SITE_LINK_TELEGRAM->link }}">
+                <!-- ការពារ SITE_LINK_TELEGRAM -->
+                <a href="{{ optional($SITE_LINK_TELEGRAM)->link ?? '#' }}">
                     <svg style="width: 50px; height:50px;" enable-background="new 0 0 24 24" height="512"
                         viewBox="0 0 24 24" width="512">
                         <circle cx="12" cy="12" fill="#039be5" r="12"></circle>
@@ -645,7 +649,8 @@
             </div>
 
             <div class="fab-action fab-action-2">
-                <a href="{{ $SITE_LINK_CHAT->link }}">
+                <!-- ការពារ SITE_LINK_CHAT -->
+                <a href="{{ optional($SITE_LINK_CHAT)->link ?? '#' }}">
                     <svg style="width: 50px; height:50px;" viewBox='10 6 1000 1024' height="512">
                         <path id='lightning' d='M213.6,634.6l146-231.6c23.2-36.8,73-46,107.8-19.9l116.1,87.1c10.7,8,25.3,7.9,35.9-0.1
                         l156.8-119c20.9-15.9,48.3,9.2,34.2,31.4L664.5,614c-23.2,36.8-73,46-107.8,19.9l-116.1-87.1c-10.7-8-25.3-7.9-35.9,0.1L247.8,666

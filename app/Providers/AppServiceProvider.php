@@ -20,31 +20,46 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        // យើងប្រើ try...catch ដើម្បីការពារកុំឱ្យគាំង (Error 500) 
-        // នៅពេលដែល Database ថ្មីមិនទាន់បាន Migrate តារាងបញ្ចូល
-        try {
-            // ONLY run database queries if we are NOT running in the console/build step
-            if (! $this->app->runningInConsole()) {
-                
+        // ១. កំណត់តម្លៃដើម (Default) ជាមុន ដើម្បីការពារ Error "Undefined variable" ក្នុង Blade
+        $viewData = [
+            'mainColor' => null,
+            'SITE_MENUS' => collect(),
+            'PRODUCT_TYPES' => collect(),
+            'NEW_ARRIVALS' => collect(),
+            'HOT_SALES' => collect(),
+            'HEADER_LOGOS' => null,
+            'SITE_PHONENUMBER' => null,
+            'SITE_MAIL' => null,
+            'SITE_NAMES' => null,
+            'SITE_ICONS' => null,
+            'SITE_LINK_CHAT' => null,
+            'SITE_LINK_TELEGRAM' => null,
+            'GET_LOCATION' => null,
+            'GET_EMAIL' => null,
+            'GET_NUMBER_FOOTER' => null,
+            'SITE_TEXTFOOTER' => null,
+            'GET_FOLLOW_US' => collect(),
+            'GET_IMAGE_PAYMENT' => collect(),
+            'GET_EASYLINKS' => collect(),
+            'GET_ABOUT_US' => collect(),
+        ];
+
+        if (! $this->app->runningInConsole()) {
+            try {
                 $cacheDuration = 5;
                 $cacheRemember = function ($key, $duration, $callback) {
                     return Cache::remember($key, $duration, $callback);
                 };
 
-                // Product Types
-                $PRODUCT_TYPES = $cacheRemember('key_product_types', $cacheDuration, function() {
+                $viewData['PRODUCT_TYPES'] = $cacheRemember('key_product_types', $cacheDuration, function() {
                     return ProductType::where('status', '1')->get();
                 });
 
-                // Site Menu
-                $SITE_MENUS = $cacheRemember('key_site_menus', $cacheDuration, function() {
-                    return SiteMenu::where('status', '1')
-                        ->where('isActiveMenu', '1')
-                        ->get();
+                $viewData['SITE_MENUS'] = $cacheRemember('key_site_menus', $cacheDuration, function() {
+                    return SiteMenu::where('status', '1')->where('isActiveMenu', '1')->get();
                 });
 
-                // New Arrivals
-                $NEW_ARRIVALS = $cacheRemember('key_new_arrivals', $cacheDuration, function() {
+                $viewData['NEW_ARRIVALS'] = $cacheRemember('key_new_arrivals', $cacheDuration, function() {
                     return Products::select('products.id', 'products.product_name', 'products.thumbnail', 'products.original_price', 'products.price_after_discount', 'products.details')
                         ->join('new_arrival_hot_sales', 'new_arrival_hot_sales.product_id', '=', 'products.id')
                         ->where('products.status', '1')
@@ -53,8 +68,7 @@ class AppServiceProvider extends ServiceProvider
                         ->get();
                 });
 
-                // Hot Sales
-                $HOT_SALES = $cacheRemember('key_hot_sales', $cacheDuration, function() {
+                $viewData['HOT_SALES'] = $cacheRemember('key_hot_sales', $cacheDuration, function() {
                     return Products::select('products.id', 'products.product_name', 'products.thumbnail', 'products.original_price', 'products.price_after_discount', 'products.details')
                         ->join('new_arrival_hot_sales', 'new_arrival_hot_sales.product_id', '=', 'products.id')
                         ->where('products.status', '1')
@@ -63,55 +77,42 @@ class AppServiceProvider extends ServiceProvider
                         ->get();
                 });
 
-                // Site Icons and Names
-                $SITE_ICONS = Settings::where('key', 'site.icon')->first();
-                $SITE_NAMES = Settings::where('key', 'site.sitename')->first();
+                $viewData['SITE_ICONS'] = Settings::where('key', 'site.icon')->first();
+                $viewData['SITE_NAMES'] = Settings::where('key', 'site.sitename')->first();
 
-                // EasyLinks
-                $GET_EASYLINKS = $cacheRemember('key_easylinks', $cacheDuration, function() {
+                $viewData['GET_EASYLINKS'] = $cacheRemember('key_easylinks', $cacheDuration, function() {
                     return EasyLink::select('site_menu.name as site_name', 'easy_links.menu_id', 'easy_links.route')
                         ->join('site_menu', 'site_menu.id', '=', 'easy_links.menu_id')
                         ->get();
                 });
 
-                // About Us
-                $GET_ABOUT_US = $cacheRemember('key_aboutus', $cacheDuration, function() {
-                    return SiteMenu::where('isActiveMenu', '0')
-                        ->where('status', '1')
-                        ->get();
+                $viewData['GET_ABOUT_US'] = $cacheRemember('key_aboutus', $cacheDuration, function() {
+                    return SiteMenu::where('isActiveMenu', '0')->where('status', '1')->get();
                 });
 
-                // Settings
                 $settings = $cacheRemember('key_settings', $cacheDuration, function() {
                     return Settings::select('key', 'value', 'link')->get();
                 });
 
-                // Share data with views
-                View::share([
-                    'mainColor' => $settings->firstWhere('key', 'site.color')->value ?? null,
-                    'SITE_MENUS' => $SITE_MENUS,
-                    'PRODUCT_TYPES' => $PRODUCT_TYPES,
-                    'NEW_ARRIVALS' => $NEW_ARRIVALS,
-                    'HOT_SALES' => $HOT_SALES,
-                    'HEADER_LOGOS' => $settings->firstWhere('key', 'site.logo.front') ?? null,
-                    'SITE_PHONENUMBER' => $settings->firstWhere('key', 'site.phonenumber') ?? null,
-                    'SITE_MAIL' => $settings->firstWhere('key', 'site.mail') ?? null,
-                    'SITE_NAMES' => $SITE_NAMES,
-                    'SITE_ICONS' => $SITE_ICONS,
-                    'SITE_LINK_CHAT' => $settings->firstWhere('key', 'site.chat') ?? null,
-                    'SITE_LINK_TELEGRAM' => $settings->firstWhere('key', 'site.telegram') ?? null,
-                    'GET_LOCATION' => $settings->firstWhere('key', 'site.location') ?? null,
-                    'GET_EMAIL' => $settings->firstWhere('key', 'site.email') ?? null,
-                    'GET_NUMBER_FOOTER' => $settings->firstWhere('key', 'site.numberphone') ?? null,
-                    'SITE_TEXTFOOTER' => $settings->firstWhere('key', 'site.textfooter') ?? null,
-                    'GET_FOLLOW_US' => $settings->where('key', 'site.follow_us') ?? collect(),
-                    'GET_IMAGE_PAYMENT' => $settings->where('key', 'site.payment_image') ?? collect(),
-                    'GET_EASYLINKS' => $GET_EASYLINKS,
-                    'GET_ABOUT_US' => $GET_ABOUT_US,
-                ]);
+                $viewData['mainColor'] = $settings->firstWhere('key', 'site.color')->value ?? null;
+                $viewData['HEADER_LOGOS'] = $settings->firstWhere('key', 'site.logo.front') ?? null;
+                $viewData['SITE_PHONENUMBER'] = $settings->firstWhere('key', 'site.phonenumber') ?? null;
+                $viewData['SITE_MAIL'] = $settings->firstWhere('key', 'site.mail') ?? null;
+                $viewData['SITE_LINK_CHAT'] = $settings->firstWhere('key', 'site.chat') ?? null;
+                $viewData['SITE_LINK_TELEGRAM'] = $settings->firstWhere('key', 'site.telegram') ?? null;
+                $viewData['GET_LOCATION'] = $settings->firstWhere('key', 'site.location') ?? null;
+                $viewData['GET_EMAIL'] = $settings->firstWhere('key', 'site.email') ?? null;
+                $viewData['GET_NUMBER_FOOTER'] = $settings->firstWhere('key', 'site.numberphone') ?? null;
+                $viewData['SITE_TEXTFOOTER'] = $settings->firstWhere('key', 'site.textfooter') ?? null;
+                $viewData['GET_FOLLOW_US'] = $settings->where('key', 'site.follow_us') ?? collect();
+                $viewData['GET_IMAGE_PAYMENT'] = $settings->where('key', 'site.payment_image') ?? collect();
+
+            } catch (\Exception $e) {
+                // បើអត់ទាន់មាន Database វានឹងរំលង ប៉ុន្តែនៅតែមានអថេរ Default ខាងលើដើម្បីការពារកុំឱ្យគាំង
             }
-        } catch (\Exception $e) {
-            // ទុកឱ្យទទេ ប្រសិនបើមាន Error (ឧ. អត់មាន Table/Column) កូដនឹងរំលង ដើម្បីឱ្យវេបសាយអាចដើរបាន
         }
+
+        // ២. ចែករំលែកអថេរទាំងអស់ទៅកាន់ Views (នៅក្រៅ Catch គឺធានាថាដើរជានិច្ច)
+        View::share($viewData);
     }
 }

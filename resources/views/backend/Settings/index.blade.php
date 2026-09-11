@@ -148,7 +148,8 @@
                     </h3>
                 </div>
 
-                <a href="{{ url('update-logo',encrypt($logos->id)) }}">
+              
+                    <a href="{{ url('update-logo', encrypt(optional($logos)->id)) }}">
                     <span style="color: black;"></span>
                     <i class='bx bxs-right-arrow-circle' style="font-size: 30px;"></i>
                 </a>

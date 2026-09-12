@@ -4,12 +4,14 @@
     <style>
         :root {
             --primary-color: #CE181E;
-            --text-dark: #111827;
+            --secondary-color: #111827;
+            --danger-color: #ef4444;
+            --text-dark: #1f2937;
             --text-muted: #6b7280;
             --bg-light: #F9FAFB;
-            --image-bg: #F3F4F6;
+            --image-bg: #f8f9fa;
             --card-radius: 16px;
-            --transition: all 0.3s ease;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
@@ -25,17 +27,29 @@
             margin-bottom: 2rem;
             position: relative;
             font-family: "Kantumruy Pro", sans-serif;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
         }
 
         /* --- Slider Container --- */
         .intro-slider-container {
             border-radius: var(--card-radius);
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
 
         /* =========================================
-           MODERN PRODUCT CARD (With Quick View Hover)
+           MODERN PRODUCT CARD
            ========================================= */
         .cls_card_item {
             background: #fff;
@@ -44,16 +58,17 @@
             transition: var(--transition);
             display: flex;
             flex-direction: column;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
             height: 100%;
             overflow: hidden; 
             padding: 0; 
+            text-decoration: none;
         }
 
-        /* Hover Effect for the whole card */
         .cls_card_item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-color: transparent;
         }
 
         /* Top Image Area */
@@ -69,7 +84,7 @@
 
         .size-image {
             width: 100%;
-            height: 160px;
+            height: 180px; /* រាងខ្ពស់បន្តិចដើម្បីបង្ហាញរូបកុំព្យូទ័របានច្បាស់ */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -84,7 +99,7 @@
         }
 
         .cls_card_item:hover .size-image img {
-            transform: scale(1.05); 
+            transform: scale(1.08); 
         }
 
         /* Floating Badges */
@@ -99,14 +114,18 @@
         }
 
         .custom-badge {
-            background: #374151; 
+            background: var(--secondary-color); 
             color: #fff;
             font-size: 0.7rem;
-            font-weight: 600;
-            padding: 5px 10px;
-            border-radius: 6px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 20px;
             letter-spacing: 0.5px;
             text-transform: uppercase;
+        }
+
+        .badge-discount {
+            background: var(--danger-color);
         }
 
         /* Wishlist Heart Button */
@@ -114,23 +133,24 @@
             position: absolute;
             top: 15px;
             right: 15px;
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             background: #fff;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #4b5563;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            color: #9ca3af;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
             transition: var(--transition);
             z-index: 2;
             text-decoration: none !important;
+            font-size: 1.1rem;
         }
 
         .wishlist-btn:hover {
-            color: var(--primary-color);
-            transform: scale(1.1);
+            color: var(--danger-color);
+            transform: scale(1.15);
         }
 
         /* Quick View Overlay Animation */
@@ -144,19 +164,19 @@
             display: flex;
             align-items: flex-end;
             justify-content: center;
-            padding-bottom: 12px;
+            padding-bottom: 15px;
             opacity: 0;
-            transform: translateY(15px);
-            transition: all 0.3s ease;
+            transform: translateY(20px);
+            transition: var(--transition);
             z-index: 3;
             pointer-events: none; 
         }
 
         .quick-view-text {
-            font-weight: 800;
-            font-size: 0.95rem;
-            color: var(--text-dark);
-            text-decoration: none !important;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            text-decoration: underline !important;
             pointer-events: auto; 
             transition: var(--transition);
         }
@@ -183,9 +203,9 @@
 
         .card-title {
             font-size: 1.05rem;
-            font-weight: 800; 
+            font-weight: 700; 
             color: var(--text-dark);
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.5rem;
             line-height: 1.4;
             transition: var(--transition);
             font-family: "Kantumruy Pro", sans-serif;
@@ -201,26 +221,60 @@
         }
 
         .card-text {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            line-height: 1.5;
-            margin-bottom: 1.5rem;
-            flex-grow: 1; 
-            font-family: "Kantumruy Pro", sans-serif;
-            
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+    background-color: #f8fafc; /* ពណ៌ផ្ទៃខាងក្រោយប្រផេះលាយខៀវស្រាល (ស្លេក) */
+    border: 1px solid #f1f5f9; /* ស៊ុមស្តើងៗ */
+    padding: 10px 12px;
+    border-radius: 10px; /* គែមមូលស្អាត */
+    color: #475569; /* ពណ៌អក្សរប្រផេះចាស់ ងាយស្រួលអាន */
+    font-size: 0.82rem;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    flex-grow: 1; 
+    font-family: "Kantumruy Pro", sans-serif;
+    
+    /* កាត់អក្សរបើវែងពេក ត្រឹម ២ បន្ទាត់ */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    
+    transition: all 0.3s ease;
+}
+.cls_card_item:hover .card-text {
+    background-color: #f1f5f9;
+    color: #1e293b;
+}
+
+/* បន្ថែមសញ្ញា (Bullet) ខាងមុខអត្ថបទ ដើម្បីឱ្យដឹងថាជាការរៀបរាប់លក្ខណៈ */
+.card-text::before {
+    content: "•";
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-right: 6px;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+        /* លាក់ Description នៅលើទូរស័ព្ទ ដើម្បីកុំឱ្យកាតវែងពេក */
+        @media (max-width: 767px) {
+            .card-text {
+                display: none;
+            }
+            .card-body {
+                padding: 1rem;
+            }
+            .size-image {
+                height: 140px;
+            }
         }
 
         /* --- Price & Cart Footer Row --- */
         .card-footer-custom {
             display: flex;
             justify-content: space-between;
-            align-items: center; /* Centers cart button with price perfectly */
+            align-items: center; 
             margin-top: auto;
-            border-top: 1px solid #f3f4f6; 
+            border-top: 1px dashed #e5e7eb; 
             padding-top: 1rem;
         }
 
@@ -228,45 +282,45 @@
             display: flex;
             flex-direction: column;
             margin-bottom: 0;
-            /* Changed to standard modern sans-serif for numbers to look clean and premium */
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', -apple-system, sans-serif;
         }
 
         .cls_price b {
             color: var(--primary-color);
-            font-size: 1.25rem; /* Made price slightly larger */
-            font-weight: 700; /* Clean bold, not overly chunky */
-            line-height: 1.1;
-            letter-spacing: -0.5px; /* Pulls numbers slightly closer together for a pro look */
+            font-size: 1.3rem; 
+            font-weight: 800; 
+            line-height: 1;
+            letter-spacing: -0.5px; 
         }
 
         .cls_price s {
             color: #9ca3af;
             font-size: 0.85rem;
             font-weight: 500;
-            margin-top: 2px;
+            margin-top: 4px;
             text-decoration: line-through;
         }
 
         /* Cart Button */
         .cart-btn {
-            background-color: #111827; 
+            background-color: var(--secondary-color); 
             color: #fff;
             border: none;
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: var(--transition);
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
 
         .cart-btn:hover {
             background-color: var(--primary-color);
-            transform: scale(1.05);
+            transform: scale(1.05) rotate(-5deg); /* បង្វិលបន្តិចពេល Hover មើលទៅរស់រវើក */
+            box-shadow: 0 4px 12px rgba(206, 24, 30, 0.3);
         }
     </style>
 
@@ -309,6 +363,13 @@
                 
                 <div class="row justify-content-start">
                     @foreach ($NEW_ARRIVALS as $item)
+                        @php
+                            $price_after = (float)$item->price_after_discount;
+                            $price_orig = (float)$item->original_price;
+                            $has_discount = $price_after > 0 && $price_after < $price_orig;
+                            $discount_percent = $has_discount ? round((($price_orig - $price_after) / $price_orig) * 100) : 0;
+                        @endphp
+                        
                         <div class="col-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
                             <div class="card cls_card_item w-100">
                                 
@@ -316,6 +377,9 @@
                                 <div class="product-media-wrap">
                                     <div class="product-badges">
                                         <span class="custom-badge">NEW</span>
+                                        @if($has_discount)
+                                            <span class="custom-badge badge-discount">-{{ $discount_percent }}%</span>
+                                        @endif
                                     </div>
                                     
                                     <a href="#" class="wishlist-btn" title="Add to Wishlist">
@@ -328,7 +392,6 @@
                                         </div>
                                     </a>
 
-                                    <!-- Quick View Fade Overlay -->
                                     <div class="quick-view-overlay">
                                         <a href="{{ url('product-detail/'.encrypt($item->id)) }}" class="quick-view-text">Quick view</a>
                                     </div>
@@ -341,28 +404,22 @@
                                     </a>
                                     
                                     <div class="card-text">
-                                        {{ strip_tags($item->details) }}
+                                        {{ \Illuminate\Support\Str::limit(strip_tags($item->details), 80, '...') }}
                                     </div>
                                     
                                     <!-- Price & Cart Row -->
                                     <div class="card-footer-custom">
                                         <p class="cls_price">
-                                            <?php 
-                                                $price_after = number_format((float)$item->price_after_discount, 2);
-                                                $price_orig = number_format((float)$item->original_price, 2);
-                                            ?>
-                                            <b>${{ $price_after != 0.00 ? $price_after : $price_orig }}</b>
-                                            @if($price_after != 0.00)
-                                                <s>${{ $price_orig }}</s>
+                                            <b>${{ number_format($has_discount ? $price_after : $price_orig, 2) }}</b>
+                                            @if($has_discount)
+                                                <s>${{ number_format($price_orig, 2) }}</s>
                                             @endif
                                         </p>
                                         
-                                        <!-- Add to Cart Button -->
                                         <button class="cart-btn" title="Add to Cart">
                                             <i class="icon-shopping-cart"></i>
                                         </button>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -378,6 +435,13 @@
                 
                 <div class="row justify-content-start">
                     @foreach ($HOT_SALES as $item)
+                        @php
+                            $price_after = (float)$item->price_after_discount;
+                            $price_orig = (float)$item->original_price;
+                            $has_discount = $price_after > 0 && $price_after < $price_orig;
+                            $discount_percent = $has_discount ? round((($price_orig - $price_after) / $price_orig) * 100) : 0;
+                        @endphp
+                        
                         <div class="col-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
                             <div class="card cls_card_item w-100">
                                 
@@ -385,6 +449,9 @@
                                 <div class="product-media-wrap">
                                     <div class="product-badges">
                                         <span class="custom-badge" style="background-color: var(--primary-color);">SALE</span>
+                                        @if($has_discount)
+                                            <span class="custom-badge badge-discount">-{{ $discount_percent }}%</span>
+                                        @endif
                                     </div>
                                     
                                     <a href="#" class="wishlist-btn" title="Add to Wishlist">
@@ -397,7 +464,6 @@
                                         </div>
                                     </a>
 
-                                    <!-- Quick View Fade Overlay -->
                                     <div class="quick-view-overlay">
                                         <a href="{{ url('product-detail/'.encrypt($item->id)) }}" class="quick-view-text">Quick view</a>
                                     </div>
@@ -410,19 +476,14 @@
                                     </a>
                                     
                                     <div class="card-text">
-                                        {{ strip_tags($item->details) }}
+                                        {{ \Illuminate\Support\Str::limit(strip_tags($item->details), 80, '...') }}
                                     </div>
                                     
-                                    <!-- Price & Cart Row -->
                                     <div class="card-footer-custom">
                                         <p class="cls_price">
-                                            <?php 
-                                                $price_after = number_format((float)$item->price_after_discount, 2);
-                                                $price_orig = number_format((float)$item->original_price, 2);
-                                            ?>
-                                            <b>${{ $price_after != 0.00 ? $price_after : $price_orig }}</b>
-                                            @if($price_after != 0.00)
-                                                <s>${{ $price_orig }}</s>
+                                            <b>${{ number_format($has_discount ? $price_after : $price_orig, 2) }}</b>
+                                            @if($has_discount)
+                                                <s>${{ number_format($price_orig, 2) }}</s>
                                             @endif
                                         </p>
                                         
@@ -430,7 +491,6 @@
                                             <i class="icon-shopping-cart"></i>
                                         </button>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
